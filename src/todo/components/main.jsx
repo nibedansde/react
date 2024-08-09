@@ -12,32 +12,52 @@ export function Main({ todos, dispatch }) {
     const visibleTodos = useMemo(
         () =>
             todos.filter((todo) => {
-                if (route === "/active")
-                    return !todo.completed;
-
-                if (route === "/completed")
-                    return todo.completed;
-
+                if (route === "/active") return !todo.completed;
+                if (route === "/completed") return todo.completed;
                 return todo;
             }),
         [todos, route]
     );
 
-    const toggleAll = useCallback((e) => dispatch({ type: TOGGLE_ALL, payload: { completed: e.target.checked } }), [dispatch]);
+    const toggleAll = useCallback(
+        (e) => dispatch({ type: TOGGLE_ALL, payload: { completed: e.target.checked } }),
+        [dispatch]
+    );
+
+    // Determine the last three completed tasks
+    const lastCompleted = useMemo(() => {
+        return todos
+            .filter((todo) => todo.completed)
+            .sort((a, b) => b.completedTime - a.completedTime)
+            .slice(0, 3)
+            .map((todo) => todo.id);
+    }, [todos]);
 
     return (
         <main className="main" data-testid="main">
             {visibleTodos.length > 0 ? (
                 <div className="toggle-all-container">
-                    <input className="toggle-all" type="checkbox" data-testid="toggle-all" checked={visibleTodos.every((todo) => todo.completed)} onChange={toggleAll} />
+                    <input
+                        className="toggle-all"
+                        type="checkbox"
+                        data-testid="toggle-all"
+                        checked={visibleTodos.every((todo) => todo.completed)}
+                        onChange={toggleAll}
+                    />
                     <label className="toggle-all-label" htmlFor="toggle-all">
-                        Toggle All Input
+                        Toggle All
                     </label>
                 </div>
             ) : null}
             <ul className={classnames("todo-list")} data-testid="todo-list">
                 {visibleTodos.map((todo, index) => (
-                    <Item todo={todo} key={todo.id} dispatch={dispatch} index={index} />
+                    <Item
+                        todo={todo}
+                        key={todo.id}
+                        dispatch={dispatch}
+                        index={index}
+                        lastCompleted={lastCompleted}
+                    />
                 ))}
             </ul>
         </main>
