@@ -111,7 +111,7 @@ export const Item = memo(function Item({ todo, dispatch, index, lastCompleted })
                             checked={completed}
                             onChange={toggleItem}
                             style={{
-                                width: '20px',
+                                width: '120px',
                                 height: '20px',
                                 borderColor: getItemColor(), // Set the border color of the marker
                                 borderRadius: '50%', // Circular checkbox
@@ -129,16 +129,15 @@ export const Item = memo(function Item({ todo, dispatch, index, lastCompleted })
                         >
                             {title}
                         </label>
-                        <div style={{ display: 'flex', flexDirection: 'column', zIndex: 1, marginLeft: '15px', fontSize: '0.85em', color: getItemColor() }}>
-                            <span>
-                                {addedTime ? `Added: ${new Date(addedTime).toLocaleTimeString()}` : ''}
+                        <div style={{ display: 'flex', flexDirection: 'column', zIndex: 1, marginLeft: '15px', fontSize: '0.55em', color: getItemColor() }}>
+                            <span><strong>{addedTime ? `Added: ${new Date(addedTime).toLocaleTimeString("en-US")}` : ''}</strong>
                             </span>
                             <span>
-                                {completedTime ? `Completed: ${new Date(completedTime).toLocaleTimeString()}` : ''}
+                               <strong>{completedTime ? `Completed: ${new Date(completedTime).toLocaleTimeString("en-US")}` : ''}</strong> 
                             </span>
                             {!completed && !colorChanged && timeRemaining > 0 && (
                                 <span style={{ marginTop: '5px' }}>
-                                    Changes in {timeRemaining}s
+                                    <strong>Changes in {timeRemaining}s</strong>
                                 </span>
                             )}
                         </div>
@@ -147,16 +146,16 @@ export const Item = memo(function Item({ todo, dispatch, index, lastCompleted })
                             data-testid="todo-item-button"
                             onClick={removeItem}
                             style={{
-                                backgroundColor: "pink",
+                                backgroundColor: color,
                                 border: color,
-                                color: color, // Ensure the icon matches the item color
+                                color: "white", // Ensure the icon matches the item color
                                 cursor: 'pointer',
                                 fontSize: '0.86em',
                                 marginLeft: '115px',
                                 zIndex: 1
                             }}
                         >
-                        -Remove
+                       Remove
                         </button>
                     </>
                 )}
